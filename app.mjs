@@ -1,8 +1,6 @@
 
 import express  from 'express'
-import {addTask} from './model.js'
-import {removeTask} from './model.js'
-
+import {addTask, updateTask, removeTask} from './model.js'
 
 const app = express()
 const port = 3000
@@ -28,11 +26,22 @@ app.post('/new-task', (req, res) => {addTask
   res.json({"message" : "ok"})
 })
 
-app.delete('/delete-task/:id', (req, res) => {addTask
-  tasks = removeTask(tasks, countTask)
+app.delete('/delete-task/:id', (req, res) => {
+  tasks = removeTask(tasks, req.params.id)
   res.json({"message" : "élément supprimé"})
 })
 
+app.put('/update-task/:id', (req, res) => {
+  let name = req.body.name
+  let description = req.body.description
+  
+  console.log(tasks)
+  console.log(name)
+  console.log(description)
+  console.log(req.params.id)
+  tasks = updateTask(tasks, name, description, req.params.id)
+  res.json({"message" : "élément modifié"})
+})
 
 
 

@@ -25,5 +25,19 @@ export function addTask(
 export function removeTask(tasks: Array<Task>, 
     countTask: number ) : Array<Task>{
     
+    //On supprime la tâche à l'id countTask (1 = une seule tâche à supprimer)
     return tasks.splice(countTask, 1);
+}
+
+export function updateTask(tasks: Array<Task>, 
+    name: string, 
+    description:string,
+    countTask: number ) : Array<Task>{
+
+        console.log("ici : " + tasks[countTask]["name"])
+    
+    tasks[countTask]["name"] = name;
+    tasks[countTask]["description"] = description;
+
+    return tasks;
 }
