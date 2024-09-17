@@ -1,7 +1,7 @@
 
 import express  from 'express'
-import { updateTask, removeTask} from './model.js'
-import { getTasks, addTask } from './db_utils.js'; // Import des fonctions depuis db_utils.js
+import { updateTask} from './model.js'
+import { getTasks, addTask, removeTask } from './db_utils.js'; // Import des fonctions depuis db_utils.js
 
 const app = express()
 const port = 3000
@@ -48,17 +48,13 @@ app.post('/new-task', async (req, res) => {
   }
 });
 
-// app.post('/new-task', (req, res) => {addTask
-//   let name = req.body.name
-//   let description = req.body.description
-
-//   tasks = addTask(tasks, name, description, countTask++)
-//   res.json({"message" : "ok"})
-// })
-
-app.delete('/delete-task/:id', (req, res) => {
-  tasks = removeTask(tasks, req.params.id)
-  res.json({"message" : "élément supprimé"})
+app.delete('/delete-task/:id', async (req, res) => {
+  try {
+    await removeTask( req.params.id);
+    res.json({ "message": "Tâche supprimée" });
+  } catch (error) {
+    res.status(500).json({ "error": "Erreur lors de la suppression de la tâche" });
+  }
 })
 
 app.put('/update-task/:id', (req, res) => {

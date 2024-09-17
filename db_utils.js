@@ -1,5 +1,6 @@
 const { MongoClient } = require('mongodb');
 const uri = "mongodb://localhost:27017";
+const { ObjectId } = require('mongodb');
 
 function getClient(){
   const client = new MongoClient(uri);
@@ -17,7 +18,7 @@ async function addTask(task) {
   try {
     return await collection.insertMany([task]);
   } catch (error) {
-    console.error('Erreur lors de l ajout de la tâches:', error);
+    console.error('Erreur lors de l ajout de la tâche:', error);
     throw error;
   }
 }
@@ -32,7 +33,20 @@ async function getTasks() {
   }
 }
 
+async function removeTask(id) {
+  console.log("id de la task : " + id)
+  const { collection } = getCollection(getClient())
+  try {
+    console.log("je suis dans le deleteOne", collection)
+    return await collection.deleteOne({ _id: Number(id) });
+  } catch (error) {
+    console.error('Erreur lors de la suppression de la tâche:', error);
+    throw error;
+  }
+}
+
 module.exports = {
   getTasks,
-  addTask
+  addTask,
+  removeTask
 };
