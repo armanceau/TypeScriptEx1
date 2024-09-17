@@ -1,6 +1,7 @@
 
 import express  from 'express'
 import {addTask, updateTask, removeTask} from './model.js'
+import { main } from './db_utils.js'; // Import des fonctions depuis db_utils.js
 
 const app = express()
 const port = 3000
@@ -21,6 +22,16 @@ app.get('/', (req, res) => {
 app.get('/get-task', (req, res) => {
   return res.json(tasks)
 })
+
+// Route pour récupérer les tâches
+app.get('/tasks', async (req, res) => {
+  try {   
+    return res.json(main);                                   
+  } catch (error) {
+    console.error('Erreur lors de la récupération des tâches:', error);
+    res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des tâches.' });
+  }
+});
 
 app.post('/new-task', (req, res) => {addTask
   let name = req.body.name
