@@ -6,35 +6,34 @@ async function connectToMongo(collectionName) {
   try {
     await client.connect();
     console.log("Connecté à MongoDB");
-    //taskManager = nom de la base de données à l'url : mongodb://localhost:27017
-    return client.db("taskManager").collection(collectionName);
+    const db = client.db("taskManager"); // Nom de la base de données
+    const collection = db.collection(collectionName); // Nom de la collection
+    return { client, collection }; // Retourne à la fois le client et la collection
   } catch (error) {
     console.error('Erreur de connexion à MongoDB:', error);
     throw error;
   }
 }
 
-function findAllTasks(collection) {
-  return collection.find({}).toArray();
+async function findAllTasks(collection) {
+  try {
+    return await collection.find({}).toArray();
+  } catch (error) {
+    console.error('Erreur lors de la récupération des tâches:', error);
+    throw error;
+  }
 }
 
-function main() {
-  //task : nom de la collection
-  connectToMongo("task")
-    .then(collection => {
-      return findAllTasks(collection);
-    })
-    .then(tasks => {
-      console.log("Tâches trouvées :");
-      console.log(tasks);
-    })
-    .catch(error => {
-      console.error("Une erreur est survenue :", error);
-    });
+async function getTasks() {
+  const { client, collection } = await connectToMongo("task"); // Assurez-vous que "task" est le bon nom de la collection
+  try {
+    return await findAllTasks(collection);
+  } finally {
+    // Assurez-vous de fermer la connexion à MongoDB
+    await client.close();
+  }
 }
-
-main();
 
 module.exports = {
-  main
+  getTasks
 };
