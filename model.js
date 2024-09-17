@@ -16,8 +16,12 @@ function removeTask(tasks, countTask) {
     return tasks.splice(countTask, 1);
 }
 function updateTask(tasks, name, description, countTask) {
-    console.log("ici : " + tasks[countTask]["name"]);
-    tasks[countTask]["name"] = name;
-    tasks[countTask]["description"] = description;
+    if (countTask >= 0 && countTask < tasks.length) {
+        tasks[countTask].name = name;
+        tasks[countTask].description = description;
+    }
+    else {
+        console.log("index se toruve hors du tableau : ".concat(countTask));
+    }
     return tasks;
 }

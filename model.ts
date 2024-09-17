@@ -34,10 +34,13 @@ export function updateTask(tasks: Array<Task>,
     description:string,
     countTask: number ) : Array<Task>{
 
-        console.log("ici : " + tasks[countTask]["name"])
-    
-    tasks[countTask]["name"] = name;
-    tasks[countTask]["description"] = description;
+    if (countTask >= 0 && countTask < tasks.length) {
+        tasks[countTask].name = name;
+        tasks[countTask].description = description;
+    }
+    else{
+        console.log(`index se toruve hors du tableau : ${countTask}`)
+    }
 
     return tasks;
 }

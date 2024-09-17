@@ -14,6 +14,10 @@ var tasks = [
 
 var countTask = 0;
 
+app.get('/', (req, res) => {
+  return res.send("👋")
+})
+
 app.get('/get-task', (req, res) => {
   return res.json(tasks)
 })
