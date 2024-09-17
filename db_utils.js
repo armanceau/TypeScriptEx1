@@ -1,6 +1,5 @@
 const { MongoClient } = require('mongodb');
 const uri = "mongodb://localhost:27017";
-const { ObjectId } = require('mongodb');
 
 function getClient(){
   const client = new MongoClient(uri);
