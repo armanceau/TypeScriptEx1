@@ -6,8 +6,7 @@ import { getTasks, addTask, removeTask } from './db_utils.js'; // Import des fon
 const app = express()
 const port = 3000
 
-app.use(express.json())//permet de récupérer
-//données client json
+app.use(express.json()) //permet de récupérer données client json
 
 var tasks = [
   
