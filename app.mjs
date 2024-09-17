@@ -1,11 +1,13 @@
 
 import express  from 'express'
 import { updateTask} from './model.js'
+import cors from 'cors'
 import { getTasks, addTask, removeTask } from './db_utils.js'; // Import des fonctions depuis db_utils.js
 
 const app = express()
 const port = 3000
 
+app.use(cors());
 app.use(express.json()) //permet de récupérer données client json
 
 var tasks = [
