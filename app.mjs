@@ -1,7 +1,7 @@
 
 import express  from 'express'
-import {addTask, updateTask, removeTask} from './model.js'
-import { getTasks } from './db_utils.js'; // Import des fonctions depuis db_utils.js
+import { updateTask, removeTask} from './model.js'
+import { getTasks, addTask } from './db_utils.js'; // Import des fonctions depuis db_utils.js
 
 const app = express()
 const port = 3000
@@ -33,13 +33,28 @@ app.get('/tasks', async (req, res) => {
   }
 });
 
-app.post('/new-task', (req, res) => {addTask
-  let name = req.body.name
-  let description = req.body.description
+app.post('/new-task', async (req, res) => {
+  const { nom, description, _id } = req.body;
 
-  tasks = addTask(tasks, name, description, countTask++)
-  res.json({"message" : "ok"})
-})
+  if (nom != null && _id != null) {
+    try {
+      await addTask({ nom, _id });
+      res.json({ "message": "Tâche ajoutée" });
+    } catch (error) {
+      res.status(500).json({ "error": "Erreur lors de l'ajout de la tâche" });
+    }
+  } else {
+    res.status(400).json({ "error": "Les données de la tâche sont manquantes" });
+  }
+});
+
+// app.post('/new-task', (req, res) => {addTask
+//   let name = req.body.name
+//   let description = req.body.description
+
+//   tasks = addTask(tasks, name, description, countTask++)
+//   res.json({"message" : "ok"})
+// })
 
 app.delete('/delete-task/:id', (req, res) => {
   tasks = removeTask(tasks, req.params.id)

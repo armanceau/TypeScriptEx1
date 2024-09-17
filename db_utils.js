@@ -1,21 +1,29 @@
 const { MongoClient } = require('mongodb');
 const uri = "mongodb://localhost:27017";
 
-async function connectToMongo(collectionName) {
+function getClient(){
   const client = new MongoClient(uri);
+  return client;
+}
+
+function getCollection(client){
+  const db = client.db("taskManager"); 
+  const collection = db.collection("task");
+  return { client, collection };
+}
+
+async function addTask(task) {
+  const { collection } = getCollection(getClient())
   try {
-    await client.connect();
-    console.log("Connecté à MongoDB");
-    const db = client.db("taskManager"); // Nom de la base de données
-    const collection = db.collection(collectionName); // Nom de la collection
-    return { client, collection }; // Retourne à la fois le client et la collection
+    return await collection.insertMany([task]);
   } catch (error) {
-    console.error('Erreur de connexion à MongoDB:', error);
+    console.error('Erreur lors de l ajout de la tâches:', error);
     throw error;
   }
 }
 
-async function findAllTasks(collection) {
+async function getTasks() {
+  const { collection } = getCollection(getClient())
   try {
     return await collection.find({}).toArray();
   } catch (error) {
@@ -24,16 +32,7 @@ async function findAllTasks(collection) {
   }
 }
 
-async function getTasks() {
-  const { client, collection } = await connectToMongo("task"); // Assurez-vous que "task" est le bon nom de la collection
-  try {
-    return await findAllTasks(collection);
-  } finally {
-    // Assurez-vous de fermer la connexion à MongoDB
-    await client.close();
-  }
-}
-
 module.exports = {
-  getTasks
+  getTasks,
+  addTask
 };
